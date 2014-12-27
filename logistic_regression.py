@@ -1,3 +1,4 @@
+import os
 import numpy
 import theano
 import theano.tensor as T
@@ -29,6 +30,16 @@ def logistic_regression(X, y, training_steps=10000, step_size=0.01):
           updates=((w, w - 0.1 * gw), (b, b - 0.1 * gb)))
   predict = theano.function(inputs=[input_X], outputs=prediction)
 
+  if any([x.op.__class__.__name__ in ['Gemv', 'CGemv'] for x in
+        train.maker.fgraph.toposort()]):
+    print 'Used the cpu'
+  elif any([x.op.__class__.__name__ == 'GpuGemm' for x in
+         train.maker.fgraph.toposort()]):
+    print 'Used the gpu'
+  else:
+    print 'ERROR, not able to tell if theano used the cpu or the gpu'
+    print train.maker.fgraph.toposort()
+
   # Train
   for i in range(training_steps):
     pred, err = train(X, y)
@@ -39,6 +50,20 @@ def logistic_regression(X, y, training_steps=10000, step_size=0.01):
   print "prediction on D:", predicted_values
   print "Accuracy:", 1. * (predicted_values == y).sum() / len(y) 
 
+  # Print the picture graphs
+  # after compilation
+  if not os.path.exists('pics'):
+    os.mkdir('pics')
+  theano.printing.pydotprint(predict,
+                             outfile="pics/logreg_pydotprint_predic.png",
+                             var_with_name_simple=True)
+  # before compilation
+  theano.printing.pydotprint_variables(prediction,
+                                       outfile="pics/logreg_pydotprint_prediction.png",
+                                       var_with_name_simple=True)
+  theano.printing.pydotprint(train,
+                             outfile="pics/logreg_pydotprint_train.png",
+                             var_with_name_simple=True)
 if __name__ == "__main__":
   N = 400
   feats = 784
