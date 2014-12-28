@@ -61,5 +61,39 @@ def multi_tanh_scan():
     print x_res
 
 
+def norm_rows():
+    # Find norm of rows of Matrix X
+    X = T.matrix("X")
+    result, updates = theano.scan(lambda row: T.sqrt((row ** 2).sum()), sequences=[X.T])
+    norms = theano.function(inputs=[X], outputs=result)
+
+    # Test it
+    inp = numpy.random.rand(16).reshape(4, 4)
+    
+    print "Using theano"
+    print norms(inp)
+
+    print "Using numpy"
+    print numpy.sqrt((inp ** 2).sum(0))
+
+
+def trace():
+    X = T.matrix("X")
+    results, updates = theano.scan(lambda i, j, running_sum: running_sum + X[i, j],
+                                   sequences=[T.arange(X.shape[0]), T.arange(X.shape[1])],
+                                   outputs_info=numpy.asarray(0.))
+    result = results[-1]
+    traces = theano.function(inputs=[X], outputs=result)
+    
+    # Test it
+    x = numpy.random.rand(16).reshape(4, 4)
+
+    print "Using theano"
+    print traces(x)
+    
+    print "Using numpy"
+    print numpy.diagonal(x).sum()
+
+
 if __name__ == "__main__":
-    multi_tanh_scan()
+    trace()
