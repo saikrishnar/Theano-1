@@ -71,17 +71,14 @@ def sgd_optimize(learning_rate=0.13,
                  batch_size=600):
     
     train, valid, test = util.load()
-    train_size = 50000
-    print "loading 0 - ", train_size, " train inputs in gpu memory"
-    train_x, train_y = util.create_theano_shared(train, train_size)
+    print "loading 0 - ", train[0].shape[0], " train inputs in gpu memory"
+    train_x, train_y = util.create_theano_shared(train)
 
-    valid_size = 10000
-    print "loading 0 - ", valid_size, " validation inputs in gpu memory"
-    valid_x, valid_y = util.create_theano_shared(valid, valid_size)
+    print "loading 0 - ", valid[0].shape[0], " validation inputs in gpu memory"
+    valid_x, valid_y = util.create_theano_shared(valid)
 
-    test_size = 10000
-    print "loading 0 - ", test_size, " test inputs in gpu memory"
-    test_x, test_y = util.create_theano_shared(test, test_size)
+    print "loading 0 - ", test[0].shape[0], " test inputs in gpu memory"
+    test_x, test_y = util.create_theano_shared(test)
 
     print " building model..."
     # Create symbolic variables for models
