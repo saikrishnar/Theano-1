@@ -16,13 +16,10 @@ def load():
     f.close()
     return (train, valid, test)
 
-def create_theano_shared(data, shared_index = 0):
+def create_theano_shared(data, shared_size = SHARED_SIZE, shared_index = 0):
     """
     data is a tuple (x, y) where x is real-array and y is integer class label
     """
-    shared_x = theano.shared(numpy.asarray(data[0][shared_index*SHARED_SIZE:(shared_index+1)*SHARED_SIZE], dtype=theano.config.floatX))
-    shared_y = theano.shared(numpy.asarray(data[1][shared_index*SHARED_SIZE:(shared_index+1)*SHARED_SIZE], dtype=theano.config.floatX))
+    shared_x = theano.shared(numpy.asarray(data[0][shared_index*shared_size:(shared_index+1)*shared_size], dtype=theano.config.floatX))
+    shared_y = theano.shared(numpy.asarray(data[1][shared_index*shared_size:(shared_index+1)*shared_size], dtype=theano.config.floatX))
     return (shared_x, T.cast(shared_y, 'int32'))
-
-train, valid, test = load()
-create_theano_shared(train)
