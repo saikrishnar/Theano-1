@@ -123,7 +123,15 @@ def sgd_optimize(learning_rate=0.13,
                                         x: test_x[index*batch_size: (index+1)*batch_size],
                                         y: test_y[index*batch_size: (index+1)*batch_size]
                                       })
-                              
+        
+        ######################
+        # Train the model
+        #####################
+        
+        # Clear gpu memory 
+        train_x.set_value([[]])
+        valid_x.set_value([[]])
+        test_x.set_value([[]])
 
 if __name__ == "__main__":
     sgd_optimize()
