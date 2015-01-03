@@ -41,7 +41,7 @@ def create_convolution_filter(n_input_filters=3, n_output_filters=2, locality_si
     conv_out = conv.conv2d(input, W)
 
     # Create the output
-    output = T.tanh(conv_out + b.dimshuffle('x', 0, 'x', 'x'))
+    output = T.nnet.sigmoid(conv_out + b.dimshuffle('x', 0, 'x', 'x'))
     conv_function = theano.function([input], output)
     return conv_function
 
