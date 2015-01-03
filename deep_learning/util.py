@@ -4,12 +4,12 @@ import numpy
 import theano
 from theano import tensor as T
 
-def load():
+def load(filename="mnist.pkl.gz"):
     """
-    The data is stored in data/mnist.pickle.gz file. This method unzips and unpicles data
+    The data is stored in data/filename file. This method unzips and unpicles data
     and loads it into three variables: train, test and valid
     """
-    f = gzip.open("data/mnist.pkl.gz", "rb")
+    f = gzip.open("data/{}".format(filename), "rb")
     train, valid, test = cPickle.load(f)
     f.close()
     return (train, valid, test)
