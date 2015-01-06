@@ -163,6 +163,15 @@ def sgd_optimize(learning_rate=0.1,
                        y: test_y[index*batch_size : (index+1)*batch_size]
                     })
 
+    # Create number of minibatches
+    n_train_batches = train[0].shape[0] / batch_size
+    n_valid_batches = valid[0].shape[0] / batch_size
+    n_test_batches = test[0].shape[0] / batch_size
 
+    # Finally, main loop for training
+    util.train_test_model(n_epochs, train_model, valid_model, test_model,
+                          n_train_batches, n_valid_batches, n_test_batches)
+
+    
 if __name__ == "__main__":
     sgd_optimize()
