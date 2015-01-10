@@ -191,7 +191,7 @@ def sgd_optimize(learning_rate=0.1,
                  pretrain_learning_rate=0.001,
                  pretrain_epochs=15,
                  finetune_epochs=1000,
-                 batch_size=1):
+                 batch_size=20):
     # Load datasets
     train, valid, test = util.load()
     print "loading 0 - ", train[0].shape[0], " train inputs in gpu memory"
